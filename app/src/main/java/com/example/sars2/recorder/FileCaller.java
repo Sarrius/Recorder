@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class FileCaller {
 
-    public static String renameFile (){
+    public static String nameFile (){
         long date = new Date().getTime();
         return String.valueOf(date);
     }

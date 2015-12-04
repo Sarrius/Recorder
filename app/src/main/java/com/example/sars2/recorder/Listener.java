@@ -6,7 +6,7 @@ import android.os.Environment;
 import java.io.IOException;
 
 
-//refference = 32767.0d;
+//
 //peakAmplitude = mediarecorder.getMaxAmplitude()
 
 /**
@@ -16,12 +16,14 @@ public class Listener extends MediaRecorder {
 
     SoundMeter soundMeter = null;
 
+
+    //конструктор налаштовує таким чином щоб не зберігати файл, а просто записувати
     Listener (){
 
         this.setAudioSource(MediaRecorder.AudioSource.MIC);
         this.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         this.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        this.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + FileCaller.renameFile());
+        this.setOutputFile("/dev/null"); //файл не зберігатиметься
         try {
             this.prepare();
         } catch (IOException e) {
@@ -31,6 +33,7 @@ public class Listener extends MediaRecorder {
 
     }
 
+    //починає записувати, але не зберігає файл
     public void startToListen (){
             this.start();
         if (userIsSpeaking() == true){
@@ -38,17 +41,35 @@ public class Listener extends MediaRecorder {
         }
     }
 
+
+    //тут потрібно відрізнити тишу від голосу
+    //voiceLevel
     public boolean userIsSpeaking (){
         while (true){
-            if (soundMeter.measureSound(this.getMaxAmplitude(), 32767.0d) >= 1){
+            if (soundMeter.measureSound(this.getMaxAmplitude(), Constants.Audioconfigs.refference) >= Constants.Audioconfigs.voiceLevel){
                 return true;
-            } else if (soundMeter.measureSound(this.getMaxAmplitude(), 32767.0d) <= 1){
+            } else if (soundMeter.measureSound(this.getMaxAmplitude(), Constants.Audioconfigs.refference) <= Constants.Audioconfigs.voiceLevel){
                 return false;
             }
         }
     }
 
-    public void stopListening () {
+    public void stopListeningAndReset () {
         this.stop();
+        this.reset();
+    }
+
+    //цей метод викликається після того як Listener почув голос і спрацював метод reconfigureSettings
+    public void startRecordingFile(){
+        start();
+    }
+
+    //метод викликається зазвичай після stopListeningAndReset
+
+    public void reconfigureSettings(){
+        this.setAudioSource(AudioSource.MIC);
+        this.setOutputFormat(OutputFormat.THREE_GPP);
+        this.setAudioEncoder(AudioEncoder.AMR_NB);
+        this.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + FileCaller.nameFile());
     }
 }

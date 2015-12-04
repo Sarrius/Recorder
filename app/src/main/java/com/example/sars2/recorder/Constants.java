@@ -6,8 +6,7 @@ package com.example.sars2.recorder;
 public class Constants {
 
     public static class Audioconfigs {
-
-        static String audiofilePath = "test.3gp";
-
+        public static double refference = 32767.0d;
+        public static double voiceLevel = 1.0d;
     }
 }
