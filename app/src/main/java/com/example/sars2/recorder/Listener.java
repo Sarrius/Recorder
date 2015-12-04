@@ -21,7 +21,7 @@ public class Listener extends MediaRecorder {
         this.setAudioSource(MediaRecorder.AudioSource.MIC);
         this.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         this.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        this.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + Constants.Audioconfigs.audiofilePath);
+        this.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + FileCaller.renameFile());
         try {
             this.prepare();
         } catch (IOException e) {
@@ -31,15 +31,24 @@ public class Listener extends MediaRecorder {
 
     }
 
-    public void startToListen (){ //Запитати в Богдана чи так актуально робити провірку
-        if (this != null){
+    public void startToListen (){
             this.start();
+        if (userIsSpeaking() == true){
+
         }
     }
 
-    public boolean isSpeaking (){
+    public boolean userIsSpeaking (){
         while (true){
-            if (soundMeter.measureSound)
+            if (soundMeter.measureSound(this.getMaxAmplitude(), 32767.0d) >= 1){
+                return true;
+            } else if (soundMeter.measureSound(this.getMaxAmplitude(), 32767.0d) <= 1){
+                return false;
+            }
         }
+    }
+
+    public void stopListening () {
+        this.stop();
     }
 }
