@@ -4,6 +4,7 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 
 import java.io.IOException;
+import java.util.Timer;
 
 
 //
@@ -17,7 +18,7 @@ public class Listener extends MediaRecorder {
     SoundMeter soundMeter = null;
 
 
-    //конструктор налаштовує таким чином щоб не зберігати файл, а просто записувати
+    //конструктор налаштовує  таким чином щоб не зберігати файл
     Listener (){
 
         this.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -35,7 +36,8 @@ public class Listener extends MediaRecorder {
 
     //починає записувати, але не зберігає файл
     public void startToListen (){
-            this.start();
+                    this.start();
+
         if (userIsSpeaking() == true){
 
         }

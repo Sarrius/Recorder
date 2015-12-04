@@ -2,33 +2,32 @@ package com.example.sars2.recorder;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
     CountDownTimer countDownTimer = null;
+    Timer timer = null;
     TextView display = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         //-----------------------INITIALIZATION--------------------------//
         //----------------настройка інтерфейсу і ресурсів----------------//
         init(); //конфігурація інтерфейсу
+        createAndStartCoundownTimer();
 
 
     }
@@ -43,8 +42,18 @@ public class MainActivity extends AppCompatActivity {
         display = (TextView)findViewById(R.id.display);
 
     }
-    private CountDownTimer createAndStartCoundownTimer () {
-        countDownTimer = new CountDownTimer(10000, 1000) {
+
+   /* private Timer createAndStartTimer () { //обчислення часу запису і т.д.
+
+          timer = new Timer("timer", false);
+          timer.scheduleAtFixedRate(, 1000, 10000);
+          return timer;
+    } */
+
+    private CountDownTimer createAndStartCoundownTimer () { //обмеження часу запису дорожки
+        countDownTimer = new CountDownTimer(
+                Constants.TimerSettings.whenToStop,
+                Constants.TimerSettings.steppingTime) {
             @Override
             public void onTick(long millisUntilFinished) {
                 display.setText(millisUntilFinished/1000+"");
