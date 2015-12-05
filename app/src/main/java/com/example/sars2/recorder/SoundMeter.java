@@ -4,7 +4,6 @@ import android.media.MediaRecorder;
 
 import java.io.IOException;
 
-import static java.lang.Math.log10;
 
 /**
  * Created by sars2 on 04.12.2015.
@@ -12,6 +11,7 @@ import static java.lang.Math.log10;
 public class SoundMeter  {
 
     private MediaRecorder mediaRecorder = null;
+    double mEma = 0;
 
 
     public  void start(){
@@ -41,7 +41,7 @@ public class SoundMeter  {
         if (measureSound() <= 0){
             return 0.0;
         } else {
-            return DynamicData.mEma = Constants.Audioconfigs.FILTER * measureSound() + (1.0 - Constants.Audioconfigs.FILTER) * DynamicData.mEma;
+            return mEma = Constants.Audioconfigs.FILTER * measureSound() + (1.0 - Constants.Audioconfigs.FILTER) * mEma;
         }
     }
 
