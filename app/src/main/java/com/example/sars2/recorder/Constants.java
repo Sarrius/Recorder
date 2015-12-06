@@ -6,12 +6,14 @@ package com.example.sars2.recorder;
 public class Constants {
 
     public static class Audioconfigs {
-        public static double refference = 32767.0d;
-        public static double voiceLevel = 1.0d;
+
+        public static int silenceLevel = 1000; //приміняти тільки всередині масиву із величиною soundLev
+        public static int screamLevel = 10000;
+
     }
     public static class TimerSettings {
-        public static long whenToStop = 10000;
-        public static long steppingTime = 1000;
+        public static long whenToStop = 40;
+        public static long steppingTime = 1;
 
     }
 }
